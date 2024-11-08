@@ -86,7 +86,10 @@ const swaggerOptions = {
 
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
+  url: 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.51.1/swagger-ui-bundle.js'
+}));
+
 
 /**
  * @swagger

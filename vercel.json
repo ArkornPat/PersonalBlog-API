@@ -1,16 +1,21 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "app.mjs",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "app.mjs"
-      }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.mjs",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.mjs"
+    },
+    {
+      "src": "/swagger/(.*)",
+      "dest": "app.mjs"
+    }
+  ]
+}
+
   
