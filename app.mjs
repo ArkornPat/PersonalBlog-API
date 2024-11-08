@@ -74,7 +74,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${port}`,
+        // เช็คสภาพแวดล้อม
+        url: process.env.NODE_ENV === 'production' 
+          ? 'https://personal-blog-api-eight.vercel.app' 
+          : `http://localhost:${port}`, 
       },
     ],
   },
