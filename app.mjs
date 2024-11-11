@@ -89,7 +89,7 @@ app.get("/posts/:postId", async (req, res) => {
 //UPDATE post by id
 app.put("/posts/:postId", async (req, res) => {
   const postId = req.params.postId;
-  const updatedPost = req.body;
+  const updatedPost = { ...req.body, date: new Date() }
   try {
     const result = await pool.query("select id from posts where id = $1", [
       postId,
@@ -101,7 +101,7 @@ app.put("/posts/:postId", async (req, res) => {
     }
 
     await pool.query(
-      `update posts set title = $2 ,image = $3 , category_id = $4, description = $5, content = $6, status_id = $7 where id = $1`,
+      `update posts set title = $2 ,image = $3 , category_id = $4, description = $5, content = $6, status_id = $7, date = $8 where id = $1`,
       [
         postId,
         updatedPost.title,
@@ -110,6 +110,7 @@ app.put("/posts/:postId", async (req, res) => {
         updatedPost.description,
         updatedPost.content,
         updatedPost.status_id,
+        updatedPost.date,
       ]
     );
     return res.status(200).json({ message: "Updated post sucessfully" });
@@ -149,8 +150,10 @@ app.get("/posts", async (req, res) => {
     const limit = Number(req.query.limit) || 6;
 
     // 2) ทำให้แน่ใจว่า query parameter page และ limit จะมีค่าอย่างต่ำเป็น 1
-    const safePage = Math.max(1, page); //แต่ถ้า page มีค่าน้อยกว่า 1 จะถูกแทนที่ด้วยค่า 1 เสมอ
-    const safeLimit = Math.max(1, Math.min(100, limit)); //กำหนดให้ค่าของ limit ต้องไม่เกิน 100 และ น้อยกว่า 1 จะถูกแทนที่ด้วย 1
+    //แต่ถ้า page มีค่าน้อยกว่า 1 จะถูกแทนที่ด้วยค่า 1 เสมอ
+    const safePage = Math.max(1, page); 
+    //กำหนดให้ค่าของ limit ต้องไม่เกิน 100 และ น้อยกว่า 1 จะถูกแทนที่ด้วย 1
+    const safeLimit = Math.max(1, Math.min(100, limit)); 
     const offset = (safePage - 1) * safeLimit;
     // offset คือค่าที่ใช้ในการข้ามจำนวนข้อมูลบางส่วนตอน query ข้อมูลจาก database
     // ถ้า page = 2 และ limit = 6 จะได้ offset = (2 - 1) * 6 = 6 หมายความว่าต้องข้ามแถวไป 6 แถวแรก และดึงแถวที่ 7-12 แทน
