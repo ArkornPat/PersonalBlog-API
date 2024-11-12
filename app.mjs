@@ -22,20 +22,6 @@ app.get("/profiles", (req, res) => {
 // POST posts
 app.post("/posts", async (req, res) => {
   const newPosts = req.body;
-
-  if (
-    !newPosts.title ||
-    !newPosts.image ||
-    !newPosts.category_id ||
-    !newPosts.description ||
-    !newPosts.content ||
-    !newPosts.status_id
-  ) {
-    return res
-      .status(400)
-      .json({ message: "Bad Request: Missing required fields" });
-  }
-
   try {
     const query = `insert into posts (title, image, category_id, description, content, status_id)
     values ($1, $2, $3, $4, $5, $6)`;
